@@ -1,0 +1,33 @@
+# Virtual environment
+.venv/
+venv/
+env/
+dino_em/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Data 
+data/
+*.npy
+
+# IDE stuff 
+.idea/
+.vscode/
+*.swp
+.DS_Store
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Model weights 
+*.pt
+*.pth
+.cache/
