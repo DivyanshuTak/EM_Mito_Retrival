@@ -78,9 +78,9 @@ python scripts/extract_background_patches.py \
   --datasets jrc_macrophage-2 \
   --patch-size 256
 ```
-### Data Structure
+### 4. Data Structure
 
-Download the 2D EM image slices, corresponding label files, and pre-extracted features used for this project [here](https://www.dropbox.com/scl/fo/dfsy2rplq2q72kiuy2jc0/AHgAtiEZOR3OVDHg23W6hrM?rlkey=bru3qtki4s8ajz899glqepolt&st=41tc6cmk&dl=0).
+Download the 2D EM image slices, corresponding label files, and pre-extracted mito/background patches used for this project [here](https://www.dropbox.com/scl/fo/dfsy2rplq2q72kiuy2jc0/AHgAtiEZOR3OVDHg23W6hrM?rlkey=bru3qtki4s8ajz899glqepolt&st=41tc6cmk&dl=0).
 To run retrieval, and reproduce the writeup results, organize your data and features into the following directory structure:
 
 ```text
@@ -160,8 +160,8 @@ NOTE: Dense embeddings are extremely large so sharding is done and sharded files
 
 ### Visualization
 
-The retrieval is done using the extracted embeddings, the embedding and the patch npz files store metadata, which is used for getting the patches for top k matches and visualization. within-dataset and cross-dataset retrieval can be performed by changing the query and database npz files accordingly.
-modify the configuration block at the top of `scripts/visualize_retrieval.py` (`QUERY_FEATURE_NPZ`, `QUERY_IMAGE_NPZ`, `DB_DATASETS`) accordingly, then run:
+The retrieval is done using the extracted embeddings. Within-dataset and cross-dataset retrieval can be performed by changing the query and database npz files accordingly.
+Modify the configuration block at the top of `scripts/visualize_retrieval.py` (`QUERY_FEATURE_NPZ`, `QUERY_IMAGE_NPZ`, `DB_DATASETS`) accordingly, then run:
 
 ```bash
 python scripts/visualize_retrieval.py
@@ -169,8 +169,8 @@ python scripts/visualize_retrieval.py
 
 ### Evaluation 
 
-retrieval evaluation is on the mAP and Precision@5 metrics, for instance retrieval the labels are same mitocondria instance per patch, and for semantic retrieval the labels are mitochondria vs backround. 
-NOTE : Instance retrieval can be done using both the CLS and mitochondria-embedding. However, Semantic retrieval can only be done using CLS embedding. Similar to visualisaiton within-dataset and cross-dataset retrieval can be performed by changing the query and database npz files accordingly.
+Retrieval evaluation is on the mAP and Precision@5 metrics, for instance retrieval the labels are same mitocondria instance per patch, and for semantic retrieval the labels are mitochondria vs backround. 
+NOTE : Instance retrieval can be done using both the CLS and mitochondria-embedding. However, Semantic retrieval can only be done using CLS embedding. Similar to visualizaiton, the within-dataset and cross-dataset retrieval can be performed by changing the query and database npz files accordingly.
 
 
 ```bash
