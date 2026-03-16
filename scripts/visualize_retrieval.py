@@ -25,7 +25,7 @@ from dataset_utils import (
 # Configuration
 # ============================================================================
 QUERY_FEATURE_NPZ = "/media/sdb/divyanshu/divyanshu/hhmi/results/features_UNI_masked_jrc_macrophage2_patch256.npz"
-QUERY_IMAGE_NPZ = "/media/sdb/divyanshu/divyanshu/hhmi/data/patches/jrc_macrophage2_mito_dataset_256.npz"
+QUERY_IMAGE_NPZ = "/media/sdb/divyanshu/divyanshu/hhmi/data/patchs/jrc_macrophage2_mito_dataset_256.npz"
 DB_DATASETS = [
     {
         "feature_npz": "/media/sdb/divyanshu/divyanshu/hhmi/results/features_UNI_masked_jrc_hela2_patch256.npz",
@@ -38,9 +38,10 @@ DB_DATASETS = [
 ]
 
 K = 5
-NUM_QUERIES = 5
-RANDOM_SEED = 0
+NUM_QUERIES = 4
+RANDOM_SEED = 15
 OUTPUT_PREFIX = "Uni_maskmeanpooled_macrophage2query_hela2database"
+OUTPUT_DIR = "/media/sdb/divyanshu/divyanshu/hhmi/results/retrival_viz"
 
 
 def main() -> None:
@@ -103,15 +104,13 @@ def main() -> None:
         for rank, (db_idx, score) in enumerate(zip(db_indices_np, scores_np), start=1):
             retrieved_img, retrieved_cmap = prepare_image_for_plot(db_images[db_idx])
             axes[rank].imshow(retrieved_img, cmap=retrieved_cmap)
-            label = "Mito" if not is_background(db_metadata[db_idx]) else "Background"
-            axes[rank].set_title(f"Sim: {score:.2f}\n{label}")
+            #label = "Mito" if not is_background(db_metadata[db_idx]) else "Background"
+            axes[rank].set_title(f"Sim: {score:.2f}")
             axes[rank].set_xticks([])
             axes[rank].set_yticks([])
 
         plt.tight_layout()
-        output_path = Path(
-            f"/media/sdb/divyanshu/divyanshu/hhmi/results/retrival_viz/{OUTPUT_PREFIX}_query_{query_idx}.png"   # save name 
-        )
+        output_path = Path(OUTPUT_DIR) / f"{OUTPUT_PREFIX}_query_{query_idx}.png"
         output_path.parent.mkdir(parents=True, exist_ok=True)
         plt.savefig(output_path, dpi=300, bbox_inches="tight")
         plt.close(fig)
