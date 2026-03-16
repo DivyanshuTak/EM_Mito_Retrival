@@ -152,7 +152,7 @@ Checkout the writeup behind the logic of dense embedding extraction. Dense embed
 python scripts/extract_dense_shifted.py -c config/feature_extraction.yaml
 ```
 
-NOTE: Dense embeddings are extremely large so sharding is done and sharded files are stored in`.npy` output. 
+NOTE: Dense embeddings are extremely large so sharding is done and sharded files are stored in`.npy` output. Dense embeddings for UNI model on jrc_machophage-2 can be downloaded from [here](https://www.dropbox.com/scl/fo/dfsy2rplq2q72kiuy2jc0/AHgAtiEZOR3OVDHg23W6hrM?rlkey=bru3qtki4s8ajz899glqepolt&st=41tc6cmk&dl=0).
 
 ---
 
