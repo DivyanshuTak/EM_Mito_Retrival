@@ -52,7 +52,7 @@ data/
 This project utilizes the UV environment manager. All required dependencies are listed in `requirements.txt`. To set up and activate the environment with UV, please run the following commands:
 
 ```bash
-cd /EM_Mito_retrieval
+cd EM_Mito_retrieval/
 
 uv venv
 source .venv/bin/activate
