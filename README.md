@@ -160,7 +160,7 @@ NOTE: Dense embeddings are extremely large so sharding is done and sharded files
 
 ### Visualization
 
-The retrieval is done using the extracted embeddings. Within-dataset and cross-dataset retrieval can be performed by changing the query and database npz files accordingly. The retrieval outputs are stored in `/results/retrival_viz`
+The retrieval is done using the extracted embeddings. Within-dataset and cross-dataset retrieval can be performed by changing the query and database npz files accordingly. The retrieval outputs are stored in `/results/retrival_viz`. 
 Modify the configuration block at the top of `scripts/visualize_retrieval.py` (`QUERY_FEATURE_NPZ`, `QUERY_IMAGE_NPZ`, `DB_DATASETS`) accordingly, then run:
 
 ```bash
