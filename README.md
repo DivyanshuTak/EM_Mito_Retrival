@@ -188,5 +188,5 @@ python scripts/evaluate_retrieval.py \
 ## Analysis 
 
 `notebooks/analysis.ipynb` contains analysis blocks documentation with runnable cells:
-mito width distribution, patch sanity checks, saliency maps (CLS), PCA-RGB semantic maps, and retrieval visualization.
+mito width distribution, patch sanity checks, saliency maps (CLS), PCA-RGB semantic maps.
 
