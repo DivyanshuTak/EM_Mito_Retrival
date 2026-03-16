@@ -1,0 +1,164 @@
+#!/usr/bin/env python3
+"""
+CLS saliency maps for UNI FM
+"""
+
+import argparse
+from pathlib import Path
+
+import numpy as np
+import timm
+import torch
+import torch.nn.functional as F
+import matplotlib.pyplot as plt
+import yaml
+from torchvision import transforms
+
+
+def load_config(path: str | Path) -> dict:
+    with open(path) as f:
+        return yaml.safe_load(f)
+
+
+def load_meta(m):
+    return m if isinstance(m, dict) else m.item()
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument(
+        "-c",
+        "--config",
+        type=Path,
+        default="/media/sdb/divyanshu/divyanshu/hhmi/config/pathology.yaml",
+        help="Path to pathology config YAML",
+    )
+    ap.add_argument(
+        "-n",
+        "--num-patches",
+        type=int,
+        default=5,
+        help="Number of patches to visualize",
+    )
+    args = ap.parse_args()
+
+    cfg = load_config(args.config)
+    model_name = cfg["model"]["name"]
+    model_slug = model_name.split("/")[-1].replace("-", "_")
+    dataset_name = cfg.get("dataset_name", "dataset")
+    patch_size = cfg.get("patch_size", 256)
+    input_npz = cfg["paths"]["input_npz"]
+    output_dir = Path(
+        cfg["paths"]["saliency_output_dir"] 
+    )
+    device = torch.device(cfg["device"])
+    num_patches = args.num_patches
+
+    name_prefix = f"saliency_{model_slug}_{dataset_name}_patch{patch_size}"
+
+    # imagenet norm
+    transform = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
+    ])
+    # spin up model 
+    model = timm.create_model(
+        f"hf-hub:{model_name}",
+        pretrained=True,
+        init_values=1e-5,
+        dynamic_img_size=True,
+    ).to(device).eval()
+
+    data = np.load(input_npz, allow_pickle=True)
+    images = data["images"]
+    masks = data["masks"]
+    metadata = data["metadata"]
+    if images.ndim == 4 and images.shape[-1] == 1:
+        images = images.squeeze(-1)
+
+    n = min(num_patches, len(images))
+    rng = np.random.default_rng(42)
+    indices = rng.choice(len(images), size=n, replace=False)
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    for idx, i in enumerate(indices):
+        img = images[i]
+        mask = masks[i]
+        meta = load_meta(metadata[i])
+
+        x = torch.from_numpy(np.asarray(img, dtype=np.float32))
+        if x.ndim == 2:
+            x = x.unsqueeze(0)
+        x = x.expand(3, -1, -1)
+
+        img_np = x.permute(1, 2, 0).numpy()
+        mx = max(img_np.max(), 1e-6)
+        if mx > 255:
+            img_np = (img_np / mx * 255).astype(np.uint8)
+        elif mx <= 1.0 and mx > 0:
+            img_np = (img_np * 255).astype(np.uint8)
+        else:
+            img_np = img_np.astype(np.uint8)
+
+        img_tensor = transform(img_np).unsqueeze(0).to(device)
+
+        with torch.no_grad():
+            tokens = model.forward_features(img_tensor)
+            spatial_tokens = tokens[:, 1:, :]
+            mean_attn = spatial_tokens[0].norm(dim=-1).cpu().numpy()
+
+        n_tokens = len(mean_attn)
+        grid_size = int(np.sqrt(n_tokens))
+        attn_grid = mean_attn.reshape(grid_size, grid_size)
+        attn_grid = attn_grid / (attn_grid.max() or 1e-6)
+
+        # reshape back
+        h, w = img.shape[:2]
+        attn_resized = F.interpolate(
+            torch.from_numpy(attn_grid).float().unsqueeze(0).unsqueeze(0),
+            size=(h, w),
+            mode="bicubic",
+            align_corners=False,
+        )[0, 0].numpy()
+
+        target_id = meta.get("target_label_id", 1)
+        mask_binary = (np.asarray(mask).squeeze() == target_id).astype(np.float32)
+
+        # plotting
+
+        img_display = np.asarray(img).squeeze()
+        if img_display.max() > 255:
+            img_display = (img_display / img_display.max() * 255).astype(np.uint8)
+
+        fig, axes = plt.subplots(1, 3, figsize=(12, 4))
+
+        axes[0].imshow(img_display, cmap="gray", vmin=0, vmax=255)
+        axes[0].set_title("Raw EM")
+        axes[0].axis("off")
+
+        axes[1].imshow(img_display, cmap="gray", vmin=0, vmax=255)
+        axes[1].imshow(
+            np.ma.masked_where(mask_binary < 0.5, mask_binary),
+            cmap="Greens",
+            alpha=0.5,
+        )
+        axes[1].set_title("Target mitochondrion")
+        axes[1].axis("off")
+
+        axes[2].imshow(img_display, cmap="gray", vmin=0, vmax=255)
+        axes[2].imshow(attn_resized, cmap="jet", alpha=0.5)
+        axes[2].set_title("Patch token magnitude")
+        axes[2].axis("off")
+
+        plt.tight_layout()
+        out_path = output_dir / f"{name_prefix}_{idx:03d}.png"
+        plt.savefig(out_path, dpi=150, bbox_inches="tight")
+        plt.close()
+        print(f"Saved {out_path}")
+
+    print(f"Done. {n} saliency maps in {output_dir}")
+
+
+if __name__ == "__main__":
+    main()

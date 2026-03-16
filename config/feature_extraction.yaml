@@ -1,0 +1,15 @@
+device: cuda:3
+patch_size: 256
+dataset_name: jrc_hela2
+shard_size: 32
+paths:
+  input_npz: /media/sdb/divyanshu/divyanshu/hhmi/data/patches/jrc_hela2_mito_dataset_256.npz
+  output_dir: /media/sdb/divyanshu/divyanshu/hhmi/saliency
+  saliency_output_dir: /media/sdb/divyanshu/divyanshu/hhmi/saliency/vit_pca_rgb
+  pca_output_dir: /media/sdb/divyanshu/divyanshu/hhmi/results/pca_rgb
+model:
+  name: facebook/dinov3-vitl16-pretrain-lvd1689m     # set - facebook/dinov3-vits16-pretrain-lvd1689m for ViTs
+dataloader:
+  batch_size: 32
+  num_workers: 4
+  dense_num_workers: 0
