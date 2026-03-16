@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This repo contains the code to extract features and perform zeroshot retrieval for mitochondria from EM data using [DINOv3](https://github.com/facebookresearch/dinov3) and [UNI](https://huggingface.co/MahmoodLab/UNI) pretrained models. The workflow is data download, patch extraction, feature extraction, retrieval evaluation and visualiztion. Feature extaction can done with both patch-level features ( CLS, masked mean pooled) and dense token features. Two types of retrieval are performed - instance retrieval ( retriving mitocondria patch from same instance in the dataset) and semantic retrieval ( retriving mitocondria path from mitocondria and backgroun patches). The writeup of the project can be found [here]()
+This repo contains the code to extract features and perform zeroshot retrieval for mitochondria from EM data using [DINOv3](https://github.com/facebookresearch/dinov3) and [UNI](https://huggingface.co/MahmoodLab/UNI) pretrained models. The workflow is data download, patch extraction, feature extraction, retrieval evaluation and visualiztion. Feature extaction can done with both patch-level features ( CLS, masked mean pooled) and dense token features. Two types of retrieval are performed - instance retrieval ( retriving mitocondria patch from same instance in the dataset) and semantic retrieval ( retriving mitocondria path from mitocondria and backgroun patches). The writeup of the project can be found [here](https://docs.google.com/document/d/1Tl2-BRAkeHL12qqEcJfXIVlCqYdkf4I2ZmuCkRbm0To/edit?usp=sharing)
 
 ---
 
