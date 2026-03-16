@@ -16,7 +16,6 @@ dist/
 build/
 
 # Data 
-data/
 *.npy
 
 # IDE stuff 
