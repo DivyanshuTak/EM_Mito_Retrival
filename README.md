@@ -64,7 +64,7 @@ To extract mitochondria patches from the 2D slices and build the dataset for mod
 python scripts/extract_mito_patches.py
 ```
 
-Output: `data/patches/{dataset}_mito_dataset_{patch_size}.npz` (e.g. `jrc_macrophage2_mito_dataset_256.npz`).
+
 
 ### 3. Extract Background Patches for Semantic Retrieval
 
