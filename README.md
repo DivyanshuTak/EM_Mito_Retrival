@@ -20,30 +20,7 @@ EM_Mito_retrieval/
 └── saliency/                   # saliency maps 
 ```
 
-## Data Structure
 
-Download the 2D EM image slices, corresponding label files, and pre-extracted features used for this project [here](https://www.dropbox.com/scl/fo/dfsy2rplq2q72kiuy2jc0/AHgAtiEZOR3OVDHg23W6hrM?rlkey=bru3qtki4s8ajz899glqepolt&st=41tc6cmk&dl=0).
-To run retrieval, and reproduce the writeup results, organize your data and features into the following directory structure:
-
-```text
-data/
-├── em_slices/                # 2D slices form the 3D EM volume 
-│   ├── jrc_hela-2/
-│   │   ├── slice_000.npy
-│   │   ├── slice_001.npy
-│   │   └── labels/
-│   │       ├── slice_000.npy
-│   │       └── slice_001.npy
-│   └── jrc_macrophage-2/
-│       ├── slice_000.npy
-│       └── labels/
-|            ├── slice_000.npy
-└── patches/                    # mitochondria and background patches with patch/tile size 256 and metadata
-    ├── jrc_hela2_mito_dataset_256.npz
-    ├── jrc_hela2_background_256.npz
-    ├── jrc_macrophage2_mito_dataset_256.npz
-    └── jrc_macrophage2_background_256.npz
-```
 
 ---
 
@@ -101,6 +78,31 @@ python scripts/extract_background_patches.py \
   --datasets jrc_macrophage-2 \
   --patch-size 256
 ```
+### Data Structure
+
+Download the 2D EM image slices, corresponding label files, and pre-extracted features used for this project [here](https://www.dropbox.com/scl/fo/dfsy2rplq2q72kiuy2jc0/AHgAtiEZOR3OVDHg23W6hrM?rlkey=bru3qtki4s8ajz899glqepolt&st=41tc6cmk&dl=0).
+To run retrieval, and reproduce the writeup results, organize your data and features into the following directory structure:
+
+```text
+data/
+├── em_slices/                # 2D slices form the 3D EM volume 
+│   ├── jrc_hela-2/
+│   │   ├── slice_000.npy
+│   │   ├── slice_001.npy
+│   │   └── labels/
+│   │       ├── slice_000.npy
+│   │       └── slice_001.npy
+│   └── jrc_macrophage-2/
+│       ├── slice_000.npy
+│       └── labels/
+|            ├── slice_000.npy
+└── patches/                    # mitochondria and background patches with patch/tile size 256 and metadata
+    ├── jrc_hela2_mito_dataset_256.npz
+    ├── jrc_hela2_background_256.npz
+    ├── jrc_macrophage2_mito_dataset_256.npz
+    └── jrc_macrophage2_background_256.npz
+```
+
 
 ---
 
