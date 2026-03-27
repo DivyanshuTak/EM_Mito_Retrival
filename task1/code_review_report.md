@@ -23,8 +23,8 @@ for organizing training/eval logic. Another nice addition is the fallback in
 synthetic data generation, which makes first-time setup and quick testing easier.
 The code is also written cleanly with proper docstrings and comments where needed. 
 
-
-## 1. GENERATE_DATA.PY
+## Deep Dive
+### 1. GENERATE_DATA.PY
 
 For synthetic data generation this file is okay, but for team experiments I
 would separate concerns more clearly. One function should handle sequence/data
@@ -45,7 +45,7 @@ Then collaborators can run controlled comparisons without editing python each
 time, and anyone reading the config immediately understands what was changed and
 why for that run.
 
-## 2. TRAINER.PY
+### 2. TRAINER.PY
 
 This is the biggest place to refactor. Model architecture params, tokenizer
 mapping, pad length, split logic, optimizer config, checkpoint names, and plot
@@ -63,7 +63,7 @@ so collaborators do not overwrite each other.
 Logging should move from print-only to structured logging. I would definitely
 add wandb so multiple collaborators can track train/val curves and compare runs cleanly.
 
-## 3. RUN_TRAINER.PY
+### 3. RUN_TRAINER.PY
 
 This should stay as the main entrypoint, but i would also expose a cleaner CLI. Something
 like:
