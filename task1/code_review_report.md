@@ -96,3 +96,12 @@ I would also just add a few basic checks: make sure the
 data loader returns expected shapes, run one model forward pass, and run one
 short train-step as sanity check in integration. These simple checks will catch most issues
 early when multiple people are editing the code.
+
+### 6. DOCUMENTATION / USAGE GUIDE
+
+I would add a proper README + usage guide for collaborators. It should clearly
+explain project structure, how to run training/eval with config, what each config
+section means, where outputs/checkpoints are saved, and common troubleshooting
+steps. I would also add a small contribution workflow (branch naming, PR style,
+how to log experiments), so new teammates can start quickly without back-and-forth.
+
