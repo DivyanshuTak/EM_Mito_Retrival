@@ -1,16 +1,16 @@
 # Code Review Report
 
-## Disclosure
-
-For this task, GPT-4 was used to refine language and correct grammatical
-mistakes. The review itself, including the ideas and recommendations, reflects
-my independent thinking and experience.
-
 **TLDR:** For a bigger
 project with 3-4 collaborators this code will become hard to maintain because too
 many things are hardcoded (paths, model hparams, training hparams, output
 paths, split logic). Main fix is to move to config-driven runs, split modules
 cleanly, and track experiments so ablations are easy and reproducible.
+
+## Disclosure
+
+For this task, GPT-4 was used to refine language and correct grammatical
+mistakes. The review itself, including the ideas and recommendations, reflects
+my independent thinking and experience.
 
 ## 1. GENERATE_DATA.PY
 
